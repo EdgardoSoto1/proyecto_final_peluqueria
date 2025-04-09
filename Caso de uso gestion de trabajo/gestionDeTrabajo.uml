@@ -1,0 +1,19 @@
+@startuml
+title Gestión trabajo
+
+actor Usuario
+
+rectangle "Gestión trabajo" {
+  usecase "Registrar trabajo" as RT
+  usecase "Consultar trabajo" as CT
+  usecase "Modificar trabajo" as MT
+  usecase "Eliminar trabajo" as ET
+
+  Usuario --> RT
+  RT .> MT : <<extend>>
+  CT .> MT : <<extend>>
+  CT .> ET : <<extend>>
+}
+
+@enduml
+

@@ -1,0 +1,17 @@
+@startuml
+title Gestión de Turnos
+
+actor "Registrar turno" as Registrar
+actor "Consultar Turno" as Consultar
+actor "modificar turno" as Modificar
+actor "cancelar turno" as Cancelar
+
+Registrar -[hidden]-> Consultar
+Consultar -[hidden]-> Modificar
+Modificar -[hidden]-> Cancelar
+
+Registrar .> Modificar : <<extend>>
+Consultar .> Cancelar : <<extend>>
+
+@enduml
+
