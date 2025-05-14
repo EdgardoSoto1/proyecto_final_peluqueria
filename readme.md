@@ -1,4 +1,4 @@
-# Peluquería Jorge y Verónica
+# Sistema peluqueria
 
 ## 1. Introducción
 El propósito del siguiente trabajo es desarrollar una interfaz para un negocio dedicado a la peluquería cuyos dueños manifestaron diferentes necesidades para poder optimizar el tiempo de trabajo y gestionar los turnos de los mismos.
