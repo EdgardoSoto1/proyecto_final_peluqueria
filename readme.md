@@ -1,7 +1,7 @@
 # Sistema peluqueria
 
 ## 1. Introducción
-El propósito del siguiente trabajo es desarrollar una interfaz para un negocio dedicado a la peluquería cuyos dueños manifestaron diferentes necesidades para poder optimizar el tiempo de trabajo y gestionar los turnos de los mismos.
+El propósito del siguiente trabajo es desarrollar un sistema para un negocio dedicado a la peluquería cuyos dueños manifestaron diferentes necesidades para poder optimizar el tiempo de trabajo y gestionar los turnos de los mismos.
 
 Hasta el momento, la modalidad para reservar los turnos se basa en que los clientes reservan los turnos enviando un mensaje a los dueños, previamente preguntándoles la disponibilidad de los horarios y esperando la confirmación del turno dado.
 
