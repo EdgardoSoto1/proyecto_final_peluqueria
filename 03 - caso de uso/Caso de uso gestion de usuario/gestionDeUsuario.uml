@@ -1,0 +1,35 @@
+@startuml
+title Gestión de Usuario
+
+left to right direction
+skinparam linetype polyline
+
+Actor Administrador as A
+
+rectangle "Sistema Peluquería" {
+    usecase "Dar de alta usuario" as UC1
+    usecase "Modificar usuario" as UC2
+    usecase "Consultar usuario" as UC3
+    usecase "Dar de baja usuario" as UC4
+    usecase "Validar credenciales" as UC5
+    usecase "Mostrar lista usuarios" as UC6
+}
+
+A --> UC1
+A --> UC2
+A --> UC3
+A --> UC4
+A --> UC5
+A --> UC6
+
+note right of UC1
+  Registra nuevo usuario con
+  validación de datos únicos
+end note
+
+note right of UC5
+  Autentica acceso al sistema
+  de gestión de usuarios
+end note
+
+@enduml

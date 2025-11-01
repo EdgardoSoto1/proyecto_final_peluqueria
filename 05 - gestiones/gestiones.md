@@ -1,64 +1,186 @@
-# Gestiones 
+# Gestiones del Sistema de Peluquería
 
 ## 1. Gestión de Usuarios
-- **Dar de alta usuario**: 
+
+### 1.1 Dar de Alta Usuario
+- **Datos requeridos**:
+  - Nombre de usuario (único en el sistema)
+  - Contraseña (mínimo 8 caracteres)
+  - Rol del usuario (Administrador/Empleado)
+- **Validaciones**:
+  - Verificar unicidad del nombre de usuario
+  - Validar fortaleza de contraseña
+  - Confirmar contraseña
+
+### 1.2 Modificar Usuario
+- **Campos modificables**:
   - Nombre de usuario
   - Contraseña
-- **Modificar usuario**
-- **Consultar usuario**
-- **Dar de baja usuario**
+  - Rol del usuario
+  - Estado (Activo/Inactivo)
+- **Restricciones**:
+  - Un usuario no puede modificar su propio rol
+  - Debe mantener al menos un administrador activo
+
+### 1.3 Consultar Usuario
+- **Tipos de consulta**:
+  - Lista completa de usuarios
+  - Búsqueda por nombre de usuario
+  - Filtrado por rol y estado
+- **Información mostrada**:
+  - Nombre de usuario, rol, estado, fecha de creación, último acceso
+
+### 1.4 Dar de Baja Usuario
+- **Proceso**:
+  - Baja lógica (no se elimina físicamente)
+  - Conserva historial para auditoría
+  - Previene auto-eliminación del administrador
+
+### 1.5 Autenticación de Usuario
+- **Proceso de login**:
+  - Validación de credenciales
+  - Control de usuarios activos
+  - Registro de accesos
+  - Manejo de sesiones
 
 ---
 
 ## 2. Gestión de Clientes
-- **Alta de cliente**: 
-  - Nombre
-  - Apellido
+
+### 2.1 Alta de Cliente
+- **Datos requeridos**:
+  - Nombre (obligatorio)
+  - Apellido (obligatorio)
+  - Número de teléfono (obligatorio)
+  - Email (obligatorio, único)
+- **Datos opcionales**:
+  - Observaciones especiales
+- **Validaciones**:
+  - Formato de email válido
+  - Unicidad de email
+  - Formato de teléfono correcto
+
+### 2.2 Modificar Cliente
+- **Campos modificables**:
+  - Nombre y apellido
   - Número de teléfono
   - Email
-- **Modificar cliente**: 
-  - Nombre
-  - Apellido
-  - Número de teléfono
-  - Email
-- **Consultar clientes**
-- **Dar de baja cliente**
+  - Observaciones
+  - Estado (Activo/Inactivo)
+- **Validaciones**:
+  - Mantener unicidad de email
+  - Preservar historial de turnos
+
+### 2.3 Consultar Clientes
+- **Tipos de consulta**:
+  - Lista completa paginada
+  - Búsqueda por nombre, teléfono o email
+  - Historial de turnos por cliente
+- **Información mostrada**:
+  - Datos personales, estado, fecha de registro, cantidad de turnos
+
+### 2.4 Dar de Baja Cliente
+- **Proceso**:
+  - Verificar turnos pendientes
+  - Baja lógica manteniendo historial
+  - Cancelación automática de turnos futuros
+  - Confirmación del usuario
+
+### 2.5 Búsqueda Avanzada de Clientes
+- **Criterios de búsqueda**:
+  - Por nombre (parcial o completo)
+  - Por teléfono
+  - Por email
+  - Por estado (Activo/Inactivo)
+- **Resultados ordenados por relevancia**
+
+### 2.6 Autoregistro de Cliente
+- **Proceso web/móvil**:
+  - Formulario público de registro
+  - Verificación por email
+  - Validación de datos
+  - Creación de perfil básico
 
 ---
 
 ## 3. Gestión de Turnos
-- **Registrar turno**: 
-  - Nombre
-  - Apellido
+
+### 3.1 Registrar Turno
+- **Datos del cliente**:
+  - Selección de cliente existente o registro nuevo
+  - Nombre y apellido
   - Número de teléfono
   - Email
-- **Solicitar tipo de trabajo**: 
-  - (corte, tintura, alisado)
-- **Solicitar elección de fecha y hora del turno**
-- **Anular turno**
-- **Mostrar lista de turnos agendados**: 
-  - Nombre
-  - Cliente
-  - Fecha
+- **Datos del turno**:
+  - Tipo de trabajo (corte, tintura, alisado)
+  - Fecha y hora disponible
+  - Duración estimada
+  - Observaciones especiales
+- **Validaciones**:
+  - Verificar disponibilidad de horario
+  - Validar duración según tipo de trabajo
+  - Confirmar datos del cliente
+
+### 3.2 Modificar Turno
+- **Campos modificables**:
+  - Fecha y hora (si hay disponibilidad)
+  - Tipo de trabajo
+  - Cliente asignado
+  - Observaciones
+- **Restricciones**:
+  - No solapar con otros turnos
+  - Respetar horarios de atención
+
+### 3.3 Anular Turno
+- **Proceso**:
+  - Selección del turno a cancelar
+  - Confirmación de la cancelación
+  - Notificación al cliente (opcional)
+  - Liberación del horario
+
+### 3.4 Consultar Turnos
+- **Tipos de vista**:
+  - Lista de turnos por fecha
+  - Agenda semanal/mensual
+  - Turnos por cliente
+  - Turnos por estado (confirmado, cancelado, realizado)
 
 ---
 
-# Gestión de Trabajos
+## 4. Gestión de Trabajos
 
-## 1. Registro de Trabajos
-- **Registrar tipo de trabajo**: 
-  - Nombre
-  - Duración
-  - Precio
+### 4.1 Registrar Tipo de Trabajo
+- **Datos requeridos**:
+  - Nombre del trabajo (único)
+  - Duración en minutos
+  - Precio del servicio
+- **Ejemplos**:
+  - Corte: 30 minutos, $500
+  - Tintura: 60 minutos, $1200
+  - Alisado: 120 minutos, $2000
 
-## 2. Modificación de Trabajos
-- **Modificar tipo de trabajo**: 
-  - Nombre
-  - Duración
-  - Precio
+### 4.2 Modificar Tipo de Trabajo
+- **Campos modificables**:
+  - Nombre del trabajo
+  - Duración en minutos
+  - Precio del servicio
+  - Estado (Activo/Inactivo)
+- **Impacto**:
+  - Los cambios afectan solo turnos futuros
+  - Los turnos existentes mantienen datos originales
 
-## 3. Baja de Trabajos
-- **Dar de baja trabajo**
+### 4.3 Dar de Baja Trabajo
+- **Proceso**:
+  - Verificar si hay turnos pendientes con este trabajo
+  - Baja lógica del tipo de trabajo
+  - Mantener historial para reportes
+
+### 4.4 Consultar Trabajos
+- **Información mostrada**:
+  - Lista de todos los tipos de trabajo
+  - Estado (Activo/Inactivo)
+  - Precio y duración actual
+  - Cantidad de turnos realizados
 
 ---
 

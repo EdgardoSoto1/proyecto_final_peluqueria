@@ -1,0 +1,35 @@
+@startuml
+title Gestión de Cliente
+
+left to right direction
+skinparam linetype polyline
+
+Actor Usuario as U
+
+rectangle "Sistema Peluquería" {
+    usecase "Alta de cliente" as UC1
+    usecase "Modificar cliente" as UC2
+    usecase "Consultar cliente" as UC3
+    usecase "Dar de baja cliente" as UC4
+    usecase "Buscar cliente" as UC5
+    usecase "Validar datos cliente" as UC6
+}
+
+U --> UC1
+U --> UC2
+U --> UC3
+U --> UC4
+U --> UC5
+U --> UC6
+
+note right of UC1
+  Registra cliente con datos
+  personales y de contacto
+end note
+
+note right of UC6
+  Valida email único y
+  formato de teléfono
+end note
+
+@enduml

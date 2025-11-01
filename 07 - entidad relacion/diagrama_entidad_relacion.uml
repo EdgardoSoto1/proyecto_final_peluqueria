@@ -1,0 +1,67 @@
+@startuml
+title Diagrama Entidad-Relación - Sistema Peluquería
+
+entity "Usuario" as usuario {
+    * id_usuario : INT <<PK>>
+    --
+    * nombre_usuario : VARCHAR(50) <<UNIQUE>>
+    * contraseña : VARCHAR(255)
+    * rol : ENUM(Administrador, Empleado)
+    * estado : ENUM(Activo, Inactivo)
+    * fecha_creacion : DATETIME
+    ultimo_acceso : DATETIME
+}
+
+entity "Cliente" as cliente {
+    * id_cliente : INT <<PK>>
+    --
+    * nombre : VARCHAR(100)
+    * apellido : VARCHAR(100)
+    * telefono : VARCHAR(20)
+    * email : VARCHAR(255) <<UNIQUE>>
+    observaciones : TEXT
+    * estado : ENUM(Activo, Inactivo)
+    * fecha_registro : DATETIME
+}
+
+entity "TipoTrabajo" as tipo_trabajo {
+    * id_tipo_trabajo : INT <<PK>>
+    --
+    * nombre : VARCHAR(100) <<UNIQUE>>
+    * duracion_minutos : INT
+    * precio : DECIMAL(10,2)
+    descripcion : TEXT
+    * estado : ENUM(Activo, Inactivo)
+    * fecha_creacion : DATETIME
+}
+
+entity "Turno" as turno {
+    * id_turno : INT <<PK>>
+    --
+    * fecha : DATE
+    * hora_inicio : TIME
+    * hora_fin : TIME
+    observaciones : TEXT
+    * fecha_creacion : DATETIME
+    fecha_cancelacion : DATETIME
+    * id_cliente : INT <<FK>>
+    * id_tipo_trabajo : INT <<FK>>
+    * id_estado_turno : INT <<FK>>
+    id_usuario_registro : INT <<FK>>
+}
+
+entity "EstadoTurno" as estado_turno {
+    * id_estado_turno : INT <<PK>>
+    --
+    * nombre : VARCHAR(50) <<UNIQUE>>
+    descripcion : TEXT
+}
+
+cliente ||--o{ turno : "solicita"
+tipo_trabajo ||--o{ turno : "requiere"
+estado_turno ||--o{ turno : "tiene"
+usuario ||--o{ turno : "registra"
+
+
+
+@enduml

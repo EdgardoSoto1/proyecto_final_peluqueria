@@ -1,0 +1,81 @@
+@startuml
+title Diagrama de Clases - Sistema Peluquería
+
+
+enum longitud {
+    corto
+    medio
+    largo
+}
+
+class Usuario {
+    +usuario: varchar
+    +contraseña: varchar
+    --
+    +agregar_usuario(usuario: varchar, contraseña: varchar, rol: varchar): boolean
+    +modificar_usuario(idUsuario: int, nuevoUsuario: varchar, nuevaContraseña: varchar): boolean
+    +baja_usuario(idUsuario: int): boolean
+    +validar_credenciales(usuario: varchar, contraseña: varchar): boolean
+    +buscar_usuario(criterio: varchar): Usuario
+}
+
+class Cliente {
+    +nombre: varchar
+    +fecha_nacimiento: datetime
+    +apellido: varchar
+    +numero_telefono: int
+    +email: varchar
+    --
+    +solicitar_turno(fecha: date, hora: time, tipoTrabajo: int): Turno
+    +añadir_cliente(nombre: varchar, apellido: varchar, telefono: int, email: varchar): boolean
+    +modificar_cliente(idCliente: int, nombre: varchar, apellido: varchar, telefono: int, email: varchar): boolean
+    +baja_de_cliente(idCliente: int): boolean
+    +buscar_cliente(criterio: varchar): Cliente
+    +validar_email(email: varchar): boolean
+}
+
+class Trabajo {
+    +tipo: varchar
+    +longitud: enum
+    +duracion: time
+    --
+    +agregar_trabajo(tipo: varchar, longitud: longitud, duracion: time, precio: float): boolean
+    +modificar_trabajo(idTrabajo: int, tipo: varchar, longitud: longitud, duracion: time, precio: float): boolean
+    +eliminar_trabajo(idTrabajo: int): boolean
+    +consultar_trabajo(idTrabajo: int): Trabajo
+    +listar_trabajos(): List<Trabajo>
+    +calcular_duracion(tipo: varchar, longitud: longitud): time
+}
+
+class Turno {
+    +fecha: date
+    +hora: time
+    --
+    +registrar_turno(idCliente: int, fecha: date, hora: time, idTrabajo: int): boolean
+    +modificar_turno(idTurno: int, fecha: date, hora: time, idTrabajo: int): boolean
+    +cancelar_turno(idTurno: int, motivo: varchar): boolean
+    +consultar_disponibilidad(fecha: date, hora: time, duracion: time): boolean
+    +listar_turnos_fecha(fecha: date): List<Turno>
+    +confirmar_turno(idTurno: int): boolean
+}
+
+' Clase Cobro
+class Cobro {
+    +medio_cobro: varchar
+    +monto: float
+    --
+    +realizar_cobro(idTurno: int, monto: float, medioCobro: varchar): boolean
+    +calcular_monto(idTrabajo: int, descuento: float): float
+    +generar_recibo(idCobro: int): string
+    +procesar_pago(monto: float, metodoPago: varchar): boolean
+}
+
+
+Usuario "1" --> "1..*" Turno : registra
+Cliente "1" --> "1..*" Turno : solicita
+Trabajo "1" --> "1..*" Turno : requiere
+Turno "1" --> "1" Cobro : genera
+longitud "1" --> "1..*" Trabajo : clasifica
+
+
+@enduml
