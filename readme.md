@@ -13,7 +13,7 @@ Los usuarios de la peluquería ingresarán al software y podrán ver los turnos 
 
 ---
 
-# Hairdressing Jorge and Verónica
+#  Hairdressing system
 
 ## 2. Abstract
 The purpose of this work is to develop an interface for a hairdressing business whose owners have expressed different needs to optimize their working time and manage their appointments.
