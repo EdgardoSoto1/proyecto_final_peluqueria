@@ -1,0 +1,41 @@
+@startuml
+actor Administrador
+
+participant "ctt: ControladorTipoTrabajo" as CTT
+participant "cdtt: <Singleton> CatálogoDeTiposDeTrabajos" as CDTT
+participant "trabajo[i]: TipoTrabajo" as TT
+
+== Registro de tipo de trabajo ==
+Administrador -> CTT : registrar_tipo_trabajo(nombre, datos)
+activate CTT
+
+CTT -> CDTT : buscar_trabajo(nombre)
+activate CDTT
+
+loop para cada trabajo en CatálogoDeTiposDeTrabajos
+    note right of CDTT
+        Se verifica cada nombre
+        comparando con los del catálogo
+        para evitar duplicados.
+    end note
+    CDTT -> TT : getNombre()
+    activate TT
+    TT --> CDTT : <<nombre : String>>
+    deactivate TT
+end
+
+CDTT --> CTT : <<trabajo_encontrado : boolean>>
+deactivate CDTT
+
+alt Trabajo no encontrado
+    CTT -> CDTT : agregar_tipo_trabajo(nombre, datos)
+    activate CDTT
+    CDTT --> CTT : <<confirmación registro : boolean = true, id_tipo_trabajo>>
+    deactivate CDTT
+    CTT --> Administrador : <<confirmación registro : boolean = true, id_tipo_trabajo>>
+else Trabajo ya existente
+    CTT --> Administrador : <<mensaje de error("El tipo de trabajo ya está registrado")>>
+end
+
+deactivate CTT
+@enduml

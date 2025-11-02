@@ -1,0 +1,41 @@
+@startuml
+actor Empleado
+
+participant "cc: ControladorCliente" as CC
+participant "cdc: <Singleton> CatálogoDeClientes" as CDC
+participant "cliente[i]: Cliente" as C
+
+== Registro de cliente ==
+Empleado -> CC : registrar_cliente(email, datos)
+activate CC
+
+CC -> CDC : buscar_cliente(email)
+activate CDC
+
+loop para cada cliente en CatálogoDeClientes
+    note right of CDC
+        Se verifica cada email
+        comparando con los del catálogo
+        para evitar duplicados.
+    end note
+    CDC -> C : getEmail()
+    activate C
+    C --> CDC : <<email : String>>
+    deactivate C
+end
+
+CDC --> CC : <<cliente_encontrado : boolean>>
+deactivate CDC
+
+alt Cliente no encontrado
+    CC -> CDC : agregar_cliente(email, datos)
+    activate CDC
+    CDC --> CC : <<confirmación registro : boolean = true, id_cliente>>
+    deactivate CDC
+    CC --> Empleado : <<confirmación registro : boolean = true, id_cliente>>
+else Cliente ya existente
+    CC --> Empleado : <<mensaje de error("El cliente ya está registrado")>>
+end
+
+deactivate CC
+@enduml

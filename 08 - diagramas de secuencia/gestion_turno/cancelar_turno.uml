@@ -1,0 +1,50 @@
+@startuml
+actor Cliente
+
+participant "ct: ControladorTurno" as CT
+participant "cdt: <Singleton> CatálogoDeTurnos" as CDT
+participant "turno[i]: Turno" as T
+
+== Cancelación de turno ==
+Cliente -> CT : cancelar_turno(numero_turno, motivo)
+activate CT
+
+CT -> CDT : buscar_turno(numero_turno)
+activate CDT
+
+loop para cada turno en CatálogoDeTurnos
+    note right of CDT
+        Se busca el turno por número
+        y se verifica que pueda
+        ser cancelado (estado y tiempo).
+    end note
+    CDT -> T : getNumeroTurno()
+    activate T
+    T --> CDT : <<numero : String>>
+    deactivate T
+end
+
+CDT --> CT : <<turno_encontrado : Turno>>
+deactivate CDT
+
+alt Turno encontrado
+    CT -> T : validar_cancelacion_permitida()
+    activate T
+    T --> CT : <<cancelacion_permitida : boolean>>
+    deactivate T
+    
+    alt Cancelación permitida
+        CT -> T : cancelar(motivo)
+        activate T
+        T --> CT : <<turno_cancelado : boolean = true>>
+        deactivate T
+        CT --> Cliente : <<confirmación cancelación : boolean = true, numero_turno>>
+    else Cancelación no permitida
+        CT --> Cliente : <<mensaje de error("No se puede cancelar el turno")>>
+    end
+else Turno no encontrado
+    CT --> Cliente : <<mensaje de error("Turno no encontrado")>>
+end
+
+deactivate CT
+@enduml

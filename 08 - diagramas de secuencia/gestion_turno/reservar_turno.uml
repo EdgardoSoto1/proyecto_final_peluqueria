@@ -1,0 +1,52 @@
+@startuml
+actor Cliente
+
+participant "ct: ControladorTurno" as CT
+participant "cdt: <Singleton> CatálogoDeTurnos" as CDT
+participant "cdc: <Singleton> CatálogoDeClientes" as CDC
+participant "turno[i]: Turno" as T
+participant "cliente[i]: Cliente" as C
+
+== Reserva de turno ==
+Cliente -> CT : reservar_turno(fecha, hora, id_tipo_trabajo, datos_cliente)
+activate CT
+
+CT -> CDT : verificar_disponibilidad(fecha, hora, duracion)
+activate CDT
+
+loop para cada turno en CatálogoDeTurnos
+    note right of CDT
+        Se verifica disponibilidad
+        comparando fecha y hora
+        para evitar solapamientos.
+    end note
+    CDT -> T : getFecha()
+    activate T
+    T --> CDT : <<fecha : Date>>
+    deactivate T
+    CDT -> T : getHora()
+    activate T
+    T --> CDT : <<hora : Time>>
+    deactivate T
+end
+
+CDT --> CT : <<horario_disponible : boolean>>
+deactivate CDT
+
+alt Horario disponible
+    CT -> CDC : buscar_o_crear_cliente(email, datos_cliente)
+    activate CDC
+    CDC --> CT : <<cliente : Cliente, es_nuevo : boolean>>
+    deactivate CDC
+    
+    CT -> CDT : crear_turno(fecha, hora, cliente, tipo_trabajo)
+    activate CDT
+    CDT --> CT : <<confirmación reserva : boolean = true, numero_turno>>
+    deactivate CDT
+    CT --> Cliente : <<confirmación reserva : boolean = true, numero_turno>>
+else Horario no disponible
+    CT --> Cliente : <<mensaje de error("Horario no disponible")>>
+end
+
+deactivate CT
+@enduml

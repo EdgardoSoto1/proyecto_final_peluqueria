@@ -1,0 +1,51 @@
+@startuml
+actor Administrador
+
+participant "cu: ControladorUsuario" as CU
+participant "cdu: <Singleton> CatálogoDeUsuarios" as CDU
+participant "user[i]: Usuario" as U
+
+== Autenticación de usuario ==
+Administrador -> CU : autenticar_usuario(nombre_usuario, contraseña)
+activate CU
+
+CU -> CDU : buscar_usuario(nombre_usuario)
+activate CDU
+
+loop para cada usuario en CatálogoDeUsuarios
+    note right of CDU
+        Se verifica cada nombre_usuario
+        comparando con los del catálogo
+        y validando credenciales.
+    end note
+    CDU -> U : getNombreUsuario()
+    activate U
+    U --> CDU : <<nombre : String>>
+    deactivate U
+end
+
+CDU --> CU : <<usuario_encontrado : Usuario>>
+deactivate CDU
+
+alt Usuario encontrado
+    CU -> U : validar_contraseña(contraseña)
+    activate U
+    U --> CU : <<contraseña_valida : boolean>>
+    deactivate U
+    
+    alt Contraseña válida
+        CU -> U : actualizar_ultimo_acceso()
+        activate U
+        U --> CU : <<acceso_actualizado : boolean>>
+        deactivate U
+        CU -> CU : crear_sesion(usuario)
+        CU --> Administrador : <<autenticación exitosa : boolean = true, token_sesion>>
+    else Contraseña inválida
+        CU --> Administrador : <<mensaje de error("Credenciales inválidas")>>
+    end
+else Usuario no encontrado
+    CU --> Administrador : <<mensaje de error("Credenciales inválidas")>>
+end
+
+deactivate CU
+@enduml

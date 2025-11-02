@@ -1,0 +1,41 @@
+@startuml
+actor Administrador
+
+participant "cu: ControladorUsuario" as CU
+participant "cdu: <Singleton> CatálogoDeUsuarios" as CDU
+participant "user[i]: Usuario" as U
+
+== Registro de usuario ==
+Administrador -> CU : registrar_usuario(nombre_usuario, datos)
+activate CU
+
+CU -> CDU : buscar_usuario(nombre_usuario)
+activate CDU
+
+loop para cada usuario en CatálogoDeUsuarios
+    note right of CDU
+        Se verifica cada nombre_usuario
+        comparando con los del catálogo
+        para evitar duplicados.
+    end note
+    CDU -> U : getNombreUsuario()
+    activate U
+    U --> CDU : <<nombre : String>>
+    deactivate U
+end
+
+CDU --> CU : <<usuario_encontrado : boolean>>
+deactivate CDU
+
+alt Usuario no encontrado
+    CU -> CDU : agregar_usuario(nombre_usuario, datos)
+    activate CDU
+    CDU --> CU : <<confirmación registro : boolean = true, id_usuario>>
+    deactivate CDU
+    CU --> Administrador : <<confirmación registro : boolean = true, id_usuario>>
+else Usuario ya existente
+    CU --> Administrador : <<mensaje de error("El usuario ya está registrado")>>
+end
+
+deactivate CU
+@enduml

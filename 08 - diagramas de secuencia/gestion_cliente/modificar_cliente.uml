@@ -1,0 +1,41 @@
+@startuml
+actor Empleado
+
+participant "cc: ControladorCliente" as CC
+participant "cdc: <Singleton> CatálogoDeClientes" as CDC
+participant "cliente[i]: Cliente" as C
+
+== Modificación de cliente ==
+Empleado -> CC : modificar_cliente(id_cliente, nuevos_datos)
+activate CC
+
+CC -> CDC : buscar_cliente_por_id(id_cliente)
+activate CDC
+
+loop para cada cliente en CatálogoDeClientes
+    note right of CDC
+        Se busca el cliente por ID
+        para verificar existencia
+        antes de modificar.
+    end note
+    CDC -> C : getId()
+    activate C
+    C --> CDC : <<id : int>>
+    deactivate C
+end
+
+CDC --> CC : <<cliente_encontrado : Cliente>>
+deactivate CDC
+
+alt Cliente encontrado
+    CC -> C : actualizar_datos(nuevos_datos)
+    activate C
+    C --> CC : <<datos_actualizados : boolean = true>>
+    deactivate C
+    CC --> Empleado : <<confirmación modificación : boolean = true, id_cliente>>
+else Cliente no encontrado
+    CC --> Empleado : <<mensaje de error("Cliente no encontrado")>>
+end
+
+deactivate CC
+@enduml
