@@ -26,7 +26,6 @@ class Cliente {
     +numero_telefono: int
     +email: varchar
     --
-    +solicitar_turno(fecha: date, hora: time, tipoTrabajo: int): Turno
     +añadir_cliente(nombre: varchar, apellido: varchar, telefono: int, email: varchar): boolean
     +modificar_cliente(idCliente: int, nombre: varchar, apellido: varchar, telefono: int, email: varchar): boolean
     +baja_de_cliente(idCliente: int): boolean
@@ -43,7 +42,6 @@ class Trabajo {
     +modificar_trabajo(idTrabajo: int, tipo: varchar, longitud: longitud, duracion: time, precio: float): boolean
     +eliminar_trabajo(idTrabajo: int): boolean
     +consultar_trabajo(idTrabajo: int): Trabajo
-    +listar_trabajos(): List<Trabajo>
     +calcular_duracion(tipo: varchar, longitud: longitud): time
 }
 
